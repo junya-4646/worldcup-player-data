@@ -51,7 +51,7 @@ class PlayerController extends Controller
         
         // 該当データがない場合
         if (!$player) {
-            abort(404, '選手が見つかりません');
+            return redirect('/players');
         }
 
         // ビューに渡す
