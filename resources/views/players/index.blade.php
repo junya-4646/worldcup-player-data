@@ -34,14 +34,14 @@
                 <td>{{ $player->birth }}</td>
                 <td>{{ $player->height }}</td>
                 <td>{{ $player->weight }}</td>
-                <td><a href="/players/{{ $player->id }}" class="detail-link" id="detailed-{{ $player->id }}">詳細</a></td>
+                <td><a href="/players/{{ $player->id }}" class="detail-link" id="detailed">詳細</a></td>
             </tr>
             @endforeach
         </tbody>
     </table>
 
     {{-- ページネーションリンク --}}
-    <div class="paginate">
+    <div class="paginate" id="page_{{ $players->currentPage() }}">
         {{ $players->links() }}
     </div>
 </body>
