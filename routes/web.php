@@ -19,4 +19,10 @@ Route::get('/', function () {
 });
 
 Route::get('/players', [PlayerController::class, 'index']);
-Route::get('/players/{id}', [PlayerController::class, 'show']);
+
+Route::get('/players/{id}', function($id) {
+    session(['from_list' => true]);
+    return redirect("/players/show/$id");
+});
+
+Route::get('/players/show/{id}', [PlayerController::class, 'show']);

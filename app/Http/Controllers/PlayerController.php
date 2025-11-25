@@ -32,6 +32,11 @@ class PlayerController extends Controller
 
     public function show($id)
     {
+        // 一覧から来た場合のみ許可
+        if (!session()->pull('from_list', false)) {
+            return redirect('/players');
+        }
+        
         // IDに該当する選手情報を取得
         $player = DB::table('players')
             ->join('countries', 'players.country_id', '=', 'countries.id')
