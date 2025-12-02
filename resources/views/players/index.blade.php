@@ -17,10 +17,13 @@
                 <th>ポジション</th>
                 <th>所属</th>
                 <th>名前</th>
+                <th>国</th>
                 <th>誕生日</th>
                 <th>身長</th>
                 <th>体重</th>
-                <th>詳細</th>
+                <th></th>
+                <th></th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
@@ -31,10 +34,27 @@
                 <td>{{ $player->position }}</td>
                 <td>{{ $player->club }}</td>
                 <td>{{ $player->name }}</td>
+                <td>{{ $player->country_name }}</td>
                 <td>{{ $player->birth }}</td>
                 <td>{{ $player->height }}</td>
                 <td>{{ $player->weight }}</td>
-                <td><a href="/players/{{ $player->id }}" class="detail-link" id="detailed">詳細</a></td>
+                <td>
+                    {{-- 詳細 --}}
+                    <a href="/players/{{ $player->id }}" class="detail-link" id="detail_button">詳細</a>
+                </td>
+                <td>
+                    {{-- 編集 --}}
+                    <a href="/players/{{ $player->id }}/edit" class="edit-link" id="edit_button">編集</a>
+                </td>
+                <td>
+                    {{-- 削除ボタン --}}
+                    <form action="/players/{{ $player->id }}/delete"
+                          method="post" 
+                          onsubmit="return confirm('この選手データを削除しますか？')"
+                          style="display:inline;">
+                        @csrf
+                        <button type="submit" class="delete-button" id="delete_button">削除</button>
+                </td>
             </tr>
             @endforeach
         </tbody>

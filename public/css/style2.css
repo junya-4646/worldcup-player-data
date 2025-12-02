@@ -33,6 +33,7 @@ th, td {
 
 td {
   font-weight: bold;
+  vertical-align: top;
 }
 
 tr:nth-child(even) {
@@ -43,21 +44,21 @@ tr:nth-child(odd) {
   background-color: #c4c4c4;
 }
 
-.detail-link {
-  color: blue;
-  text-decoration: none;
-}
-
-.detail-link:hover {
-  text-decoration: underline;
-}
-
 .pagination {
   text-align: center;
   margin-top: 20px;
 }
 
 .detail-link {
-  color: blue;
-  margin-top: 20px;
+  background-color: black;
+  color: white;
+  text-align: center;
+  text-decoration: none;
+  line-height: 40px;
+  display: block;
+  height: 40px;
+  width: 90%;
+  border-radius: 5px;
+  margin: 10px auto;
 }
+  

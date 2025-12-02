@@ -26,3 +26,7 @@ Route::get('/players/{id}', function($id) {
 });
 
 Route::get('/players/show/{id}', [PlayerController::class, 'show']);
+
+Route::get('/players/{id}/edit', [PlayerController::class, 'edit']);
+
+Route::post('/plyaers/{id}/delete', [PlayerController::class, 'delete']);
