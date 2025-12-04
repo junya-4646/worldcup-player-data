@@ -12,7 +12,6 @@ h1 {
 
 h2 {
   font-size: 18px;
-  border-left: 5px solid #333;
   padding-left: 10px;
 }
 
@@ -47,12 +46,46 @@ tr:nth-child(odd) {
 }
 
 .detail-link {
-  color: blue;
+  color: white;
+  background-color: #48d0f3;
   text-decoration: none;
+  display: block;
+  border-radius: 5px;
 }
 
 .detail-link:hover {
-  text-decoration: underline;
+  background-color: #0d92ba;
+}
+
+.edit-link {
+  color: white;
+  background-color: #a4f924;
+  text-decoration: none;
+  display: block;
+  border-radius: 5px;
+}
+
+.edit-link:hover {
+  background-color: #619b11;
+}
+
+.delete-button {
+  color: white;
+  background-color: red;
+  text-decoration: none;
+  border-radius: 5px;
+  border: none;
+  width: 80%;
+}
+
+.delete-button:hover {
+  background-color: darkred;
+}
+
+.action-form {
+  display: inline-block;
+  padding: none;
+  margin: none;
 }
 
 ul.pagination {
@@ -61,7 +94,8 @@ ul.pagination {
   margin-top: 20px;
   gap: 8px;
   list-style: none;
-}
+} 
+
 ul.pagination li.page-item {
   list-style: none;
   color: blue;

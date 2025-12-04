@@ -93,6 +93,10 @@ class PlayerController extends Controller
         $player = DB::table('players')
             ->where('id', $id)
             ->first();
+
+        // 国一覧を取得
+        $countries = DB::table('countries')
+            ->get();
         
         //　もし選手が存在しなければ一覧にリダイレクト
         if (!$player) {
@@ -100,7 +104,10 @@ class PlayerController extends Controller
         }
 
         //　編集画面へ
-        return view('players.edit', ['player' => $player]);
+        return view('players.edit', [
+            'player' => $player,
+            'countries' => $countries
+        ]);
     }
 
 
@@ -112,6 +119,73 @@ class PlayerController extends Controller
             ->update(['del_flg' => 1]);
 
         // 一覧にリダイレクト
+        return redirect('/players');
+    }
+
+    public function update(Request $request, $id)
+    {
+        // バリデーションルール
+        $rules = [
+            'uniform_num' => ['required', 'regex:/^[0-9]+$/', 'integer', 'between:1,99'],
+            'position' => ['required', 'in:GK,DF,MF,FW'],
+            'name' => ['required', 'string', 'max:100'],
+            'country_id' => ['required', 'exists:countries,id'],
+            'club' => ['required', 'string', 'max:100'],
+            'birth' => ['required', 'date'],
+            'height' => ['required', 'regex:/^[0-9]+$/', 'integer'],
+            'weight' => ['required', 'regex:/^[0-9]+$/', 'integer']
+        ];
+
+        // バリデーションメッセージ
+        $messages = [
+            'uniform_num.required' => 'この項目は必須入力です。',
+            'uniform_num.regex'    => 'この項目は半角数字で入力してください。',
+            'uniform_num.integer'  => 'この項目は整数で入力してください。',
+            'uniform_num.between'  => 'この項目は1〜99の範囲で入力してください。',
+
+            'position.required' => 'この項目は必須入力です。',
+            'position.in' => 'この項目はGK、DF、MF、FWのいずれかで選択してください。',
+
+            'name.required' => 'この項目は必須入力です。',
+            'name.string' => 'この項目は文字列で入力してください。',
+            'name.max' => 'この項目は100文字以内で入力してください。',
+            
+            'country_id.required' => 'この項目は必須入力です。',
+            'country_id.exists' => 'この項目は選択可能な国で入力してください。',
+
+            'club.required' => 'この項目は必須入力です。',
+            'club.string' => 'この項目は文字列で入力してください。',
+            'club.max' => 'この項目は100文字以内で入力してください。',
+
+            'birth.required' => 'この項目は必須入力です。',
+            'birth.date' => 'この項目は「YYYY-MM-DD」で入力してください。',
+
+            'height.required' => 'この項目は必須入力です。',
+            'height.regex' => 'この項目は半角数字で入力してください。',
+            'height.integer' => 'この項目は整数で入力してください。',
+
+            'weight.required' => 'この項目は必須入力です。',
+            'weight.regex' => 'この項目は半角数字で入力してください。',
+            'weight.integer' => 'この項目は整数で入力してください。',
+        ];
+
+        //　バリデーション実行
+        $request->validate($rules, $messages);
+
+        // 選手情報を更新
+        DB::table('players') 
+            ->where('id', $id)
+            ->update([
+                'uniform_num' => $request->uniform_num,
+                'position' => $request->position,
+                'name' => $request->name,
+                'country_id' => $request->country_id,
+                'club' => $request->club,
+                'birth' => $request->birth,
+                'height' => $request->height,
+                'weight' => $request->weight,
+            ]);
+
         return redirect('/players');
     }
 }

@@ -51,9 +51,10 @@
                     <form action="/players/{{ $player->id }}/delete"
                           method="post" 
                           onsubmit="return confirm('この選手データを削除しますか？')"
-                          style="display:inline;">
+                          style="action-form">
                         @csrf
                         <button type="submit" class="delete-button" id="delete_button">削除</button>
+                    </form>    
                 </td>
             </tr>
             @endforeach

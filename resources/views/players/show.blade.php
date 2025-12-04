@@ -6,7 +6,8 @@
     <link rel="stylesheet" href="{{ asset('css/style2.css') }}">
 </head>
 <body>
-    <h1>■選手データ</h1>
+    <h1>選手詳細画面</h1>
+    <h2>■選手データ</h2>
     <table>
         <tr>
             <th>No</th>
