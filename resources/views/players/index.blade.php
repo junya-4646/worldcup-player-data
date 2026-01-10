@@ -8,7 +8,12 @@
 <body>
     <h1>選手一覧画面</h1>
     <h2>■選手データ</h2>
-
+    <div class="logout-container">
+        <form action="{{ route('logout') }}" method="post">
+            @csrf
+            <button type='submit' id="logout_button">ログアウト</button>
+        </form>
+    </div>
     <table>
         <thead>
             <tr>
@@ -22,8 +27,11 @@
                 <th>身長</th>
                 <th>体重</th>
                 <th></th>
-                <th></th>
-                <th></th>
+                @if (Auth::check() && (Auth::user()->role === 0))
+                    {{-- 管理ユーザーのみ表示 --}}
+                    <th></th>
+                    <th></th>
+                @endif
             </tr>
         </thead>
         <tbody>
@@ -42,20 +50,23 @@
                     {{-- 詳細 --}}
                     <a href="/players/{{ $player->id }}" class="detail-link" id="detail_button">詳細</a>
                 </td>
-                <td>
-                    {{-- 編集 --}}
-                    <a href="/players/{{ $player->id }}/edit" class="edit-link" id="edit_button">編集</a>
-                </td>
-                <td>
-                    {{-- 削除ボタン --}}
-                    <form action="/players/{{ $player->id }}/delete"
-                          method="post" 
-                          onsubmit="return confirm('この選手データを削除しますか？')"
-                          style="action-form">
-                        @csrf
-                        <button type="submit" class="delete-button" id="delete_button">削除</button>
-                    </form>    
-                </td>
+                @if (Auth::check() && (Auth::user()->role === 0))
+                    {{-- 管理ユーザーのみ表示 --}}
+                    <td>
+                        {{-- 編集 --}}
+                        <a href="/players/{{ $player->id }}/edit" class="edit-link" id="edit_button">編集</a>
+                    </td>
+                    <td>
+                        {{-- 削除 --}}
+                        <form action="/players/{{ $player->id }}/delete"
+                            method="post" 
+                            onsubmit="return confirm('この選手データを削除しますか？')"
+                            style="action-form">
+                            @csrf
+                            <button type="submit" class="delete-button" id="delete_button">削除</button>
+                        </form>    
+                    </td>
+                @endif
             </tr>
             @endforeach
         </tbody>

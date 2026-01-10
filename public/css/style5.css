@@ -1,0 +1,61 @@
+.form-group {
+    display: flex;
+    flex-direction: column;
+    margin: 10px 0;
+}
+
+.form-group label {
+    font-weight: bold;
+}
+
+.error-message {
+    color: red;
+    font-size: 12px;
+    margin-top: 3px;
+}
+
+#registration_login_id_input,
+#registration_password_input,
+#registration_re_password_input {
+    border: 2px solid #484848;
+    border-radius: 5px;
+    height: 20px;
+    margin: 10px 0;
+}
+
+.radio-group {
+    display: flex;
+    gap: 5px;
+    font-size: 12px;
+    margin: 10px 0;
+}
+
+#registration_country_select {
+    border: 1.5px solid #848484;
+    border-radius: 5px;
+    font-size: 15px;
+    height: 30px;
+    margin: 10px 0;
+}
+
+#registration_button {
+    background-color: yellow;
+    color: black;
+    font-size: 20px;
+    border: 1.5px solid #484848;
+    border-radius: 5px;
+    margin: 5px 0;
+    text-align: center;
+    text-decoration: none;
+    line-height: 30px;
+    display: block;
+    height: auto;
+    width: 100%;
+}
+
+#register_form {
+    display: block;
+    margin: 0 auto;
+    text-align: center;
+    font-size: 15px;
+}

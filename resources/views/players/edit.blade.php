@@ -57,10 +57,10 @@
                         <div class="error-message">{{ $errors->first('country_id') }}</div>
                     @endif
                     <select name="country_id" id="country_of_affiliation">
-                        @foreach ($countries as $c)
-                            <option value="{{ $c->id }}"
-                                {{ $player->country_id === $c->id ? 'selected' : '' }}>
-                                {{ $c->name }}
+                        @foreach ($countries as $country)
+                            <option value="{{ $country->id }}"
+                                {{ $player->country_id === $country->id ? 'selected' : '' }}>
+                                {{ $country->name }}
                             </option>
                         @endforeach
                     </select>

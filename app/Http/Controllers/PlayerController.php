@@ -4,13 +4,16 @@ namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class PlayerController extends Controller
 {
     public function index()
     {
+        $user = Auth::user();
+
         // DBから選手データを取得
-        $players = DB::table('players')
+        $query = DB::table('players')
             ->join('countries', 'players.country_id', '=', 'countries.id')
             ->select(
                 'players.id',
@@ -23,8 +26,15 @@ class PlayerController extends Controller
                 'players.weight',
                 'countries.name as country_name'
             )
-            ->where('players.del_flg', 0)
-            ->paginate(20);
+            ->where('players.del_flg', 0);
+        
+        // roleが1（一般ユーザー）の場合、自国選手のみ表示
+        if ($user->role === 1) {
+            $query->where('players.country_id', $user->country_id);
+        }
+
+        // 取得データ
+        $players = $query->paginate(20);
         
         // 取得データをビューに渡す
         return view('players.index', ['players' => $players]);
@@ -33,11 +43,8 @@ class PlayerController extends Controller
 
     public function show($id)
     {
-        // 一覧から来た場合のみ許可
-        if (!session()->pull('from_list', false)) {
-            return redirect('/players');
-        }
-
+        $user = Auth::user();
+        
         // IDに該当する選手情報を取得
         $player = DB::table('players')
             ->join('countries', 'players.country_id', '=', 'countries.id')
@@ -50,10 +57,21 @@ class PlayerController extends Controller
                 'players.birth',
                 'players.height',
                 'players.weight',
+                'players.country_id',
                 'countries.name as country_name'
             )
             ->where('players.id', $id)
             ->first();
+
+        // 該当データがない場合
+        if (!$player) {
+            return redirect('/players')->with('error', '該当する選手データが存在しません。');
+        }
+
+        // roleが1（一般ユーザー）の場合、自国選手以外は閲覧不可
+        if ($user->role === 1 && $player->country_id !== $user->country_id) {
+            return redirect('/players')->with('error', 'この選手の詳細情報を閲覧する権限がありません。');
+        }
         
         $goal_count = DB::table('goals')
             ->where('player_id', $id)
@@ -78,17 +96,13 @@ class PlayerController extends Controller
             'goals_history' => $goals_history
         ]);
 
-        // 該当データがない場合
-        if (!$player) {
-            return redirect('/players');
-        }
-
-        // ビューに渡す
-        return view('players.show', ['player' => $player]);
     }
 
     public function edit($id) 
     {
+        //ログインチェック
+        $user = Auth::user();
+
         // 選手を取得
         $player = DB::table('players')
             ->where('id', $id)
@@ -113,6 +127,10 @@ class PlayerController extends Controller
 
     public function delete($id)
     {
+        // ログインチェック
+        $user = Auth::user();
+
+
         // 選手の論理削除
         DB::table('players')
             ->where('id', $id)
@@ -124,6 +142,9 @@ class PlayerController extends Controller
 
     public function update(Request $request, $id)
     {
+        // ログインチェック
+        $user = Auth::user();
+
         // バリデーションルール
         $rules = [
             'uniform_num' => ['required', 'regex:/^[0-9]+$/', 'integer', 'between:1,99'],

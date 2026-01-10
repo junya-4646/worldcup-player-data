@@ -2,6 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PlayerController;
+use App\Http\Controllers\LoginController;
+use App\Http\Controllers\RegisterController;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,20 +17,25 @@ use App\Http\Controllers\PlayerController;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return redirect()->route('login.show');
 });
 
-Route::get('/players', [PlayerController::class, 'index']);
+Route::middleware(['auth'])->group(function () {
+    Route::get('/players', [PlayerController::class, 'index']);
+    Route::get('/players/{id}', [PlayerController::class, 'show']);
 
-Route::get('/players/{id}', function($id) {
-    session(['from_list' => true]);
-    return redirect("/players/show/$id");
+    Route::middleware(['admin'])->group(function () {
+        Route::get('/players/{id}/edit', [PlayerController::class, 'edit']);
+        Route::post('/players/{id}/delete', [PlayerController::class, 'delete']);
+        Route::post('/players/{id}/update', [PlayerController::class, 'update']);
+    });
 });
 
-Route::get('/players/show/{id}', [PlayerController::class, 'show']);
+Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login.show');
+Route::post('/login', [LoginController::class, 'login'])->name('login.process');
+Route::middleware(['auth'])->group(function () {
+    Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
+});
 
-Route::get('/players/{id}/edit', [PlayerController::class, 'edit']);
-
-Route::post('/plyaers/{id}/delete', [PlayerController::class, 'delete']);
-
-Route::post('/players/{id}/update', [PlayerController::class, 'update']);
+Route::get('/register', [RegisterController::class, 'showRegisterForm'])->name('register.form');
+Route::post('/register', [RegisterController::class, 'register'])->name('register.process');
